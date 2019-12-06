@@ -16,6 +16,7 @@ namespace CourseLibrary.API.Controllers
     /// The authors controller.
     /// </summary>
     [ApiController]
+    [Route("api/authors")]
     public class AuthorsController : ControllerBase
     {
         /// <summary>
@@ -35,10 +36,18 @@ namespace CourseLibrary.API.Controllers
                 throw new ArgumentException(nameof(courseLibraryRepository));
         }
 
+        [HttpGet]
         public IActionResult GetAuthors()
         {
-            var authorsFromRepo = this.GetAuthors();
+            var authorsFromRepo = this.courseLibraryRepository.GetAuthors();
             return new JsonResult(authorsFromRepo);
+        }
+
+        [HttpGet("{authorId:guid}")]
+        public IActionResult GetAuthor(Guid authorId)
+        {
+            var authorFromRepo = this.courseLibraryRepository.GetAuthor(authorId);
+            return new JsonResult(authorFromRepo);
         }
     }
 }
