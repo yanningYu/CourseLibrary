@@ -1,15 +1,23 @@
-using CourseLibrary.API.DbContexts;
-using CourseLibrary.API.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+// Copyright @JJSoft - All Rights Reserved
+// Filename: Startup.cs
+// Created By  :  FrankieYu
+// Created Date:  04/10/2019  14:10
+// Last Edit:
+//    Author:   FrankieYu
+//    Date:     10/12/2019  16:03
 
 namespace CourseLibrary.API
 {
+    using CourseLibrary.API.DbContexts;
+    using CourseLibrary.API.Services;
+
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -17,20 +25,23 @@ namespace CourseLibrary.API
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; } 
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-           services.AddControllers();
-             
+            services.AddControllers(setupAction => 
+            {
+                setupAction.ReturnHttpNotAcceptable = true;
+            }).AddXmlDataContractSerializerFormatters();
+
             services.AddScoped<ICourseLibraryRepository, CourseLibraryRepository>();
 
-            services.AddDbContext<CourseLibraryContext>(options =>
+            services.AddDbContext<CourseLibraryContext>(options => 
             {
                 options.UseSqlServer(
-                    @"Server=(localdb)\mssqllocaldb;Database=CourseLibraryDB;Trusted_Connection=True;");
-            }); 
+                        @"Server=(localdb)\mssqllocaldb;Database=CourseLibraryDB;Trusted_Connection=True;");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +56,7 @@ namespace CourseLibrary.API
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(endpoints => 
             {
                 endpoints.MapControllers();
             });
