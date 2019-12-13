@@ -21,19 +21,14 @@ namespace CourseLibrary.API.Models
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or sets the first name.
+        /// Gets or sets the name.
         /// </summary>
-        public string FirstName { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the last name.
+        /// Gets or sets the age.
         /// </summary>
-        public string LastName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the date of birth.
-        /// </summary>
-        public DateTimeOffset DateOfBirth { get; set; }
+        public int Age { get; set; }
 
         /// <summary>
         /// Gets or sets the main category.

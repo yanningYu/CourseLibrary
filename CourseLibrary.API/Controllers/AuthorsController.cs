@@ -12,6 +12,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CourseLibrary.API.Controllers
 {
+    using System.Collections.Generic;
+
+    using AutoMapper;
+
+    using CourseLibrary.API.Models;
+
     /// <summary>
     /// The authors controller.
     /// </summary>
@@ -25,22 +31,34 @@ namespace CourseLibrary.API.Controllers
         private readonly ICourseLibraryRepository courseLibraryRepository;
 
         /// <summary>
+        /// The mapper.
+        /// </summary>
+        private readonly IMapper mapper;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AuthorsController"/> class.
         /// </summary>
         /// <param name="courseLibraryRepository">
         /// The course library repository.
         /// </param>
-        public AuthorsController(ICourseLibraryRepository courseLibraryRepository)
+        /// <param name="mapper">
+        /// The mapper.
+        /// </param>
+        public AuthorsController(
+            ICourseLibraryRepository courseLibraryRepository, 
+            IMapper mapper)
         {
             this.courseLibraryRepository = courseLibraryRepository ?? 
                 throw new ArgumentException(nameof(courseLibraryRepository));
+            this.mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
 
         [HttpGet]
-        public IActionResult GetAuthors()
+        public ActionResult<IEnumerable<AuthorDto>> GetAuthors()
         {
             var authorsFromRepo = this.courseLibraryRepository.GetAuthors();
-            return this.Ok(authorsFromRepo);
+            var authors = this.mapper.Map<IEnumerable<AuthorDto>>(authorsFromRepo);
+            return this.Ok(authors);
         }
 
         [HttpGet("{authorId:guid}")]

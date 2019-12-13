@@ -8,6 +8,8 @@
 
 namespace CourseLibrary.API
 {
+    using System;
+
     using CourseLibrary.API.DbContexts;
     using CourseLibrary.API.Services;
 
@@ -17,6 +19,7 @@ namespace CourseLibrary.API
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using AutoMapper;
 
     public class Startup
     {
@@ -35,6 +38,7 @@ namespace CourseLibrary.API
                 setupAction.ReturnHttpNotAcceptable = true;
             }).AddXmlDataContractSerializerFormatters();
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<ICourseLibraryRepository, CourseLibraryRepository>();
 
             services.AddDbContext<CourseLibraryContext>(options => 
